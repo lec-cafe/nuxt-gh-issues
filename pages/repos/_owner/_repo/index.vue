@@ -1,15 +1,22 @@
 <template>
   <section>
-    <h2>Repositories</h2>
+    <h2>Issues <small class="text-muted">on {{owner}}/{{repo}}</small></h2>
     <div>
       <el-table
         :data="tableData"
         style="width: 100%">
         <el-table-column
+          width="50"
+          label="#">
+          <template slot-scope="scope">
+            #{{scope.row.number}}
+          </template>
+        </el-table-column>
+        <el-table-column
           label="repos/title">
           <template slot-scope="scope">
             <router-link :to="`/repos/${scope.row.name}`" class="text-dark">
-              {{scope.row.name}}
+              {{scope.row.title}}
             </router-link>
           </template>
         </el-table-column>
@@ -26,30 +33,40 @@
 </template>
 
 <script>
+import AppLogo from '~/components/AppLogo.vue'
+
 import GithubAPI from '~/service/http'
 
 export default {
+  components: {
+    AppLogo
+  },
   data(){
     return {
-      repos: []
+      issues: []
     }
   },
   computed: {
+    owner(){
+      return this.$route.params.owner
+    },
+    repo(){
+      return this.$route.params.repo
+    },
     tableData(){
-      return this.repos.map((issue) => {
-        if(issue.open_issues_count){
-          return {
-            name: issue.full_name,
-            url: issue.html_url
-          }
+      return this.issues.map((issue) => {
+        return {
+          title: issue.title,
+          number: issue.number,
+          url: issue.html_url
         }
-        return false
-      }).filter((val)=>val);
+      })
     }
   },
   async mounted(){
     const api = new GithubAPI()
-    this.repos = await api.getMyRepos();
+    const result = await api.getIssues(this.owner,this.repo)
+    this.issues = result;
   }
 }
 </script>
