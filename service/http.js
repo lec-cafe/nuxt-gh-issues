@@ -5,17 +5,16 @@ import axios from "axios"
  */
 export default class GithubAPI{
 
-  constructor() {
-    let username = process.env.GITHUB_USERNAME
-    let password = process.env.GITHUB_TOKEN
-    if(!username){
-      username = prompt("GITHUB のユーザ名を入力してください")
-      password = prompt("GITHUB のパスワードを入力してください")
-    }
+  constructor({username,password}) {
     this.client = axios.create({
       baseURL: "https://api.github.com/",
       auth: { username, password }
     });
+  }
+
+  async aboutMe(){
+    const {data} = await this.client.get(`/user`)
+    return data
   }
 
   async getMyRepos(params={}){

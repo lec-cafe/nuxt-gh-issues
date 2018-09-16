@@ -45,7 +45,8 @@ module.exports = {
     }
   },
   plugins: [
-    '~/plugins/element-ui'
+    '~/plugins/element-ui',
+    '~/plugins/persistedstate',
   ],
   modules: [
     '@nuxtjs/dotenv',

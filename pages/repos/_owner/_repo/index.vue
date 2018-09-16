@@ -31,20 +31,14 @@
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
-
-import GithubAPI from '~/service/http'
+import {mapState, mapActions} from "vuex"
 
 export default {
-  components: {
-    AppLogo
-  },
   data(){
-    return {
-      issues: []
-    }
+    return {}
   },
   computed: {
+    ...mapState("issues",["issues"]),
     owner(){
       return this.$route.params.owner
     },
@@ -62,10 +56,15 @@ export default {
     }
   },
   async mounted(){
-    const api = new GithubAPI()
-    const result = await api.getIssues(this.owner,this.repo)
-    this.issues = result;
+    this.FETCH_ISSUES({
+      owner: this.owner,
+      repo: this.repo
+    })
+  },
+  methods:{
+    ...mapActions("issues",["FETCH_ISSUES"])
   }
+
 }
 </script>
 

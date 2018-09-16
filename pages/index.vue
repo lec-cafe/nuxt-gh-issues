@@ -26,15 +26,14 @@
 </template>
 
 <script>
-import GithubAPI from '~/service/http'
+import {mapState, mapActions} from "vuex"
 
 export default {
   data(){
-    return {
-      repos: []
-    }
+    return {}
   },
   computed: {
+    ...mapState("repos",["repos"]),
     tableData(){
       return this.repos.map((issue) => {
         if(issue.open_issues_count){
@@ -48,8 +47,10 @@ export default {
     }
   },
   async mounted(){
-    const api = new GithubAPI()
-    this.repos = await api.getMyRepos();
+    this.FETCH_REPOS()
+  },
+  methods:{
+    ...mapActions("repos",["FETCH_REPOS"])
   }
 }
 </script>
