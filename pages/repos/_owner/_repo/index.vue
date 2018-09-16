@@ -15,9 +15,7 @@
         <el-table-column
           label="repos/title">
           <template slot-scope="scope">
-            <router-link :to="`/repos/${scope.row.name}`" class="text-dark">
-              {{scope.row.title}}
-            </router-link>
+            {{scope.row.title}}
           </template>
         </el-table-column>
         <el-table-column
